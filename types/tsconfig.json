@@ -1,0 +1,18 @@
+{
+  "files": [
+    "../lib/key-value-compress.ts"
+  ],
+  "exclude": [
+    "../lib"
+  ],
+  "compilerOptions": {
+    "declaration": true,
+    "declarationDir": ".",
+    "emitDeclarationOnly": true,
+    "removeComments": false,
+    "skipLibCheck": true,
+    "types": [
+      "node"
+    ]
+  }
+}
