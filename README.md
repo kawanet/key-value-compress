@@ -3,14 +3,27 @@
 [![Node.js CI](https://github.com/kawanet/key-value-compress/workflows/Node.js%20CI/badge.svg?branch=master)](https://github.com/kawanet/key-value-compress/actions/)
 [![npm version](https://badge.fury.io/js/key-value-compress.svg)](https://www.npmjs.com/package/key-value-compress)
 
-Key-Value storage interceptor to serialize, deserialize, deflate, inflate, split, concatenate content.
+Key-Value storage interceptor to deflate, split, concatenate and inflate content.
 
 ## SYNOPSIS
 
 ```js
-const KVC = require("key-value-compress").KVC;
+const compressKVS = require("key-value-compress").compressKVS;
+const axios = require("axios");
+const Keyv = require("keyv");
 
-// TBD
+const keyv = new Keyv();
+const storage = compressKVS({storage: keyv});
+
+async function ajaxGET(url) {
+    const cache = await storage.get(url);
+    if (cache) return cache;
+    const {data} = await axios.get(url);
+    if (data) await storage.set(url, data);
+    return data;
+}
+
+const data = await ajaxGET("https://example.com/api.json");
 ```
 
 See TypeScript declaration

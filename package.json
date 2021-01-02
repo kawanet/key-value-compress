@@ -1,6 +1,6 @@
 {
   "name": "key-value-compress",
-  "description": "Key-Value storage interceptor to serialize, deserialize, deflate, inflate, split, concatenate content.",
+  "description": "Key-Value storage interceptor to deflate, split, concatenate and inflate content.",
   "version": "0.1.1",
   "author": "Yusuke Kawasaki <u-suke@kawa.net>",
   "bugs": {
@@ -34,8 +34,7 @@
     "KVS",
     "compress",
     "deflate",
-    "key-value",
-    "serialize"
+    "key-value"
   ],
   "license": "MIT",
   "main": "./lib/key-value-compress.js",
@@ -45,7 +44,6 @@
   },
   "scripts": {
     "build": "./node_modules/.bin/tsc -p .",
-    "build-types": "./node_modules/.bin/tsc -p types",
     "fixpack": "fixpack",
     "mocha": "./node_modules/.bin/mocha -R spec test/*.js",
     "test": "npm run mocha"
