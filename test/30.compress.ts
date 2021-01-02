@@ -22,6 +22,19 @@ describe(TESTNAME, () => {
         assert.equal(zlib.inflateSync(buffer).toString(), "FOO");
     });
 
+    it("raw", async () => {
+        const storage = new Map<string, Buffer>();
+        const metaStorage = new Map<string, string>();
+        const compress = "raw";
+        const kvc = compressKVS<string>({compress, inlineSize, metaStorage, storage});
+
+        await kvc.set("foo", "FOO");
+        assert.deepEqual(await kvc.get("foo"), "FOO");
+
+        const buffer = storage.values().next().value;
+        assert.equal(buffer.toString(), "FOO");
+    });
+
     it("brotli", async () => {
         const storage = new Map<string, Buffer>();
         const metaStorage = new Map<string, string>();

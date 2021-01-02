@@ -24,7 +24,7 @@ export interface CompressOptions {
      * Compression format
      * @default `deflate`
      */
-    compress?: ("deflate" | "brotli");
+    compress?: ("raw" | "deflate" | "brotli");
 
     /**
      * maximum byte length for a larger content to split into multiple data chunk records

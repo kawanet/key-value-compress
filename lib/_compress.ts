@@ -18,3 +18,8 @@ export const brotli: Compressor = {
     compress: zlib.brotliCompressSync,
     decompress: zlib.brotliDecompressSync,
 };
+
+export const raw: Compressor = {
+    compress: buf => buf,
+    decompress: buf => buf,
+}
