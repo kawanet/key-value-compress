@@ -1,6 +1,6 @@
 # key-value-compress
 
-[![Node.js CI](https://github.com/kawanet/key-value-compress/workflows/Node.js%20CI/badge.svg?branch=master)](https://github.com/kawanet/key-value-compress/actions/)
+[![Node.js CI](https://github.com/kawanet/key-value-compress/workflows/Node.js%20CI/badge.svg?branch=main)](https://github.com/kawanet/key-value-compress/actions/)
 [![npm version](https://badge.fury.io/js/key-value-compress.svg)](https://www.npmjs.com/package/key-value-compress)
 
 Key-Value storage interceptor to deflate, split, concatenate and inflate content.
@@ -27,7 +27,7 @@ const data = await ajaxGET("https://example.com/api.json");
 ```
 
 See TypeScript declaration
-[key-value-compress.d.ts](https://github.com/kawanet/key-value-compress/blob/master/types/key-value-compress.d.ts)
+[key-value-compress.d.ts](https://github.com/kawanet/key-value-compress/blob/main/types/key-value-compress.d.ts)
 for detail.
 
 ## LINKS
