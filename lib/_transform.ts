@@ -2,32 +2,33 @@
  * _transform.ts
  */
 
-import {KVS} from "./key-value-compress";
+import {KVS, MapLike} from "../types/key-value-compress";
 
 /**
  * wrap key-value storage to prepend a prefix string for storage keys
  */
 
-export function namespaceKVS<V>(storage: KVS<V>, prefix: string): KVS<V> {
-    return storage?.delete ? {get, set, delete: remove} : {get, set};
+export function namespaceKVS<V>(storage: (KVS<V> | MapLike<V>), prefix: string) {
+    if (!prefix) return storage;
 
-    function set(key: string, value: V) {
-        if (prefix) key = prefix + key;
-        return storage.set(key, value);
-    }
-
-    function get(key: string) {
-        if (prefix) key = prefix + key;
-        return storage.get(key);
-    }
-
-    function remove(key: string) {
-        if (prefix) key = prefix + key;
-        return storage.delete(key);
-    }
+    return keyFilterKVS(storage, key => prefix + key);
 }
 
-interface Encoder<V, S = V> {
+export function keyFilterKVS<V>(storage: (KVS<V> | MapLike<V>), filter: (key: string) => string) {
+    const out = {} as typeof storage;
+
+    out.get = (key: string) => storage.get(filter(key)) as any;
+
+    out.set = (key: string, value: V) => storage.set(filter(key), value);
+
+    if (storage.delete) out.delete = (key: string) => storage.delete(filter(key));
+
+    if (storage.has) out.has = (key: string) => storage.has(filter(key)) as any;
+
+    return out;
+}
+
+interface EncodeDecode<V, S = V> {
     encode: (value: V) => S;
     decode: (value: S) => V;
 }
@@ -36,19 +37,22 @@ interface Encoder<V, S = V> {
  * transform key-value storage to apply encode() and decode() methods
  */
 
-export function transformKVS<V = any, S = V>(storage: KVS<S>, transform: Encoder<V, S>): KVS<V> {
-    return storage?.delete ? {get, set, delete: key => storage.delete(key)} : {get, set};
+export function transformKVS<V, S>(storage: (KVS<S> | MapLike<S>), filter: EncodeDecode<V, S>): KVS<V> {
+    const out = {} as KVS<V>;
 
-    async function set(key: string, value: V): Promise<void> {
-        const encoded = transform.encode(value);
-        await storage.set(key, encoded);
-    }
-
-    async function get(key: string): Promise<V> {
+    out.get = async (key: string) => {
         const value = await storage.get(key);
         if ("undefined" === typeof value) return;
-        return transform.decode(value);
-    }
+        return filter.decode(value);
+    };
+
+    out.set = async (key: string, value: V) => storage.set(key, filter.encode(value));
+
+    if (storage.delete) out.delete = async (key: string) => storage.delete(key);
+
+    if (storage.has) out.has = async (key: string) => storage.has(key);
+
+    return out;
 }
 
 /**
@@ -60,7 +64,7 @@ export function jsonKVS<V>(storage: KVS<string>): KVS<V> {
     return stringifyKVS<V>(storage, JSON);
 }
 
-interface Stringifyer<V> {
+interface StringifyParse<V> {
     stringify: (value: V) => string;
     parse: (value: string) => V;
 }
@@ -69,9 +73,9 @@ interface Stringifyer<V> {
  * transform key-value storage to apply stringify() and parse() methods
  */
 
-export function stringifyKVS<V>(storage: KVS<string>, stringifyer: Stringifyer<V>): KVS<V> {
+export function stringifyKVS<V>(storage: (KVS<string> | MapLike<string>), filter: StringifyParse<V>): KVS<V> {
     return transformKVS<V, string>(storage, {
-        encode: stringifyer.stringify,
-        decode: stringifyer.parse,
+        encode: value => filter.stringify(value),
+        decode: value => filter.parse(value),
     });
 }

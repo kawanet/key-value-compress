@@ -1,23 +1,60 @@
 /**
- * key-value-compress.ts
+ * `KVS<V>` is an interface for key-value storage, such as `keyv`.
+ * https://www.npmjs.com/package/keyv
  */
 
 export interface KVS<V> {
     /**
      * write an item into storage
      */
-    set: (key: string, value: V) => void | Promise<void> | any;
+    set: (key: string, value: V) => Promise<any>;
 
     /**
      * read an item from storage
      */
-    get: (key: string) => V | Promise<V>;
+    get: (key: string) => Promise<V>;
 
     /**
      * remove an item from storage. optional.
      */
-    delete?: (key: string) => void | Promise<void> | any;
+    delete?: (key: string) => Promise<any>;
+
+    /**
+     * test an item exists on storage. optional
+     */
+    has?: (key: string) => Promise<boolean>;
 }
+
+/**
+ * `MapLike<V>` is an interface for synchronous version of `KVS<V>` such as ES6 `Map`:
+ * https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map
+ */
+
+export interface MapLike<V> {
+    /**
+     * write an item into storage
+     */
+    set: (key: string, value: V) => any;
+
+    /**
+     * read an item from storage
+     */
+    get: (key: string) => V;
+
+    /**
+     * remove an item from storage. optional.
+     */
+    delete?: (key: string) => any;
+
+    /**
+     * test an item exists on storage. optional
+     */
+    has?: (key: string) => boolean;
+}
+
+/**
+ * `compressKVS()` accepts option parameters via CompressOptions
+ */
 
 export interface CompressOptions {
     /**
@@ -52,13 +89,13 @@ export interface CompressOptions {
     /**
      * key-value storage to contain compressed content chunks
      */
-    storage: KVS<Buffer | string>;
+    storage: KVS<Buffer | string> | MapLike<Buffer | string>;
 
     /**
      * key-value storage to contain meta data
      * @default `undefined` to use `storage` both for content chunks and meta data.
      */
-    metaStorage?: KVS<string>;
+    metaStorage?: KVS<string> | MapLike<string>;
 
     /**
      * prefix string to prepend for keys of meta data storage
@@ -70,5 +107,9 @@ export interface CompressOptions {
      */
     chunkNS?: string;
 }
+
+/**
+ * `compressKVS()` convert KVS or MapLike to KVS with content compression.
+ */
 
 export function compressKVS<V = any>(options: CompressOptions): KVS<V>;

@@ -3,7 +3,7 @@
  */
 
 import * as crypto from "crypto";
-import {KVS} from "./key-value-compress";
+import {KVS} from "../types/key-value-compress";
 import {transformKVS} from "./_transform";
 
 /**
@@ -58,6 +58,6 @@ export function base64KVS(storage: KVS<string>, encoding?: BufferEncoding): KVS<
         // Buffer to base64
         encode: buf => buf.toString(encoding),
         // base64 to Buffer
-        decode: str => (str && Buffer.from(str, encoding)),
+        decode: str => Buffer.from(str || "", encoding),
     });
 }
