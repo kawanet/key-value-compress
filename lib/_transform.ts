@@ -55,15 +55,6 @@ export function encodeKVS<V, S>(storage: (KVS<S> | MapLike<S>), filter: EncodeDe
     return out;
 }
 
-/**
- * transform key-value storage to encode object V to JSON string, and vice versa
- * @param storage
- */
-
-export function jsonKVS<V>(storage: (KVS<string> | MapLike<string>)): KVS<V> {
-    return stringifyKVS<V>(storage, JSON);
-}
-
 interface StringifyParse<V> {
     stringify: (value: V) => string;
     parse: (value: string) => V;

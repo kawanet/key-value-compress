@@ -4,7 +4,7 @@
 
 import {CompressOptions, KVS} from "../types/key-value-compress";
 import * as _compress from "./_compress";
-import {jsonKVS, namespaceKVS} from "./_transform";
+import {namespaceKVS, stringifyKVS} from "./_transform";
 import {base64KVS, concatBuffer, digestBuffer, splitBuffer} from "./_util";
 
 export {KVS, CompressOptions};
@@ -34,7 +34,7 @@ export function compressKVS<V = any>(options: CompressOptions): KVS<V> {
 
     if (!metaStorage) metaStorage = storage as any;
     if (metaNS) metaStorage = namespaceKVS(metaStorage, metaNS);
-    const metaKSV = jsonKVS<KVCMeta>(metaStorage);
+    const metaKSV = stringifyKVS<KVCMeta>(metaStorage, JSON);
 
     if (chunkNS) storage = namespaceKVS(storage, chunkNS);
     if (encoding) storage = base64KVS(storage as KVS<string>, encoding);
