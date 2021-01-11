@@ -60,7 +60,7 @@ export function transformKVS<V, S>(storage: (KVS<S> | MapLike<S>), filter: Encod
  * @param storage
  */
 
-export function jsonKVS<V>(storage: KVS<string>): KVS<V> {
+export function jsonKVS<V>(storage: (KVS<string> | MapLike<string>)): KVS<V> {
     return stringifyKVS<V>(storage, JSON);
 }
 
