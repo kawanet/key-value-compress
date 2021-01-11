@@ -26,12 +26,27 @@ describe(TESTNAME, () => {
         assert.equal(Object.keys(msgpack.decode(encoded)).shift(), "buf");
     });
 
-    it("wrapKVS (json-buffer)", async () => {
+    it("stringifyKVS (json-buffer)", async () => {
         const storage = new Map<string, string>();
 
         const JSONB = require("json-buffer");
         type V = { buf: Buffer };
         const kvs = stringifyKVS<V>(storage, JSONB);
+
+        await kvs.set("foo", {buf: Buffer.from("FOO")});
+        assert.deepEqual((await kvs.get("foo"))?.buf, Buffer.from("FOO"));
+
+        const encoded = storage.values().next().value;
+        assert.equal(typeof encoded, "string");
+        assert.equal(Object.keys(JSON.parse(encoded)).shift(), "buf");
+    });
+
+    it("stringifyKVS (buffer-json)", async () => {
+        const storage = new Map<string, string>();
+
+        const BJSON = require("buffer-json");
+        type V = { buf: Buffer };
+        const kvs = stringifyKVS<V>(storage, BJSON);
 
         await kvs.set("foo", {buf: Buffer.from("FOO")});
         assert.deepEqual((await kvs.get("foo"))?.buf, Buffer.from("FOO"));
