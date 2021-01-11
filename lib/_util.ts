@@ -4,7 +4,7 @@
 
 import * as crypto from "crypto";
 import {KVS} from "../types/key-value-compress";
-import {transformKVS} from "./_transform";
+import {encodeKVS} from "./_transform";
 
 /**
  * generate digest hash string for Buffer
@@ -54,7 +54,7 @@ type BufferEncoding = "base64";
 
 export function base64KVS(storage: KVS<string>, encoding?: BufferEncoding): KVS<Buffer> {
     if (!encoding) encoding = "base64";
-    return transformKVS<Buffer, string>(storage as KVS<string>, {
+    return encodeKVS<Buffer, string>(storage as KVS<string>, {
         // Buffer to base64
         encode: buf => buf.toString(encoding),
         // base64 to Buffer

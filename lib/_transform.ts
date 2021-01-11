@@ -37,7 +37,7 @@ interface EncodeDecode<V, S = V> {
  * transform key-value storage to apply encode() and decode() methods
  */
 
-export function transformKVS<V, S>(storage: (KVS<S> | MapLike<S>), filter: EncodeDecode<V, S>): KVS<V> {
+export function encodeKVS<V, S>(storage: (KVS<S> | MapLike<S>), filter: EncodeDecode<V, S>): KVS<V> {
     const out = {} as KVS<V>;
 
     out.get = async (key: string) => {
@@ -74,7 +74,7 @@ interface StringifyParse<V> {
  */
 
 export function stringifyKVS<V>(storage: (KVS<string> | MapLike<string>), filter: StringifyParse<V>): KVS<V> {
-    return transformKVS<V, string>(storage, {
+    return encodeKVS<V, string>(storage, {
         encode: value => filter.stringify(value),
         decode: value => filter.parse(value),
     });
