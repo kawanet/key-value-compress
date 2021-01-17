@@ -6,10 +6,9 @@
 .idea/
 .vscode/
 build/
-lib/*.js
+lib/**/*.js
 node_modules/
 npm-debug.log*
 package-lock.json
 test/**/*.js
-types/_*.d.ts
 ~$*
