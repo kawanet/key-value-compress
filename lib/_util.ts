@@ -3,8 +3,10 @@
  */
 
 import * as crypto from "crypto";
-import {KVS} from "../types/key-value-compress";
+import {KVC} from "../types/key-value-compress";
 import {encodeKVS} from "./_transform";
+
+type KVS<T> = KVC.KVS<T>;
 
 /**
  * generate digest hash string for Buffer

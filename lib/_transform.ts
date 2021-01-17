@@ -2,7 +2,10 @@
  * _transform.ts
  */
 
-import {KVS, MapLike} from "../types/key-value-compress";
+import {KVC} from "../types/key-value-compress";
+
+type KVS<T> = KVC.KVS<T>;
+type MapLike<T> = KVC.MapLike<T>;
 
 /**
  * wrap key-value storage to prepend a prefix string for storage keys

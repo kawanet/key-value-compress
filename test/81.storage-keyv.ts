@@ -3,13 +3,12 @@
 /**
  * @example
  * docker run -d -p 11211:11211 --name memcached memcached
- * MEMCACHE_SERVERS=localhost:11211 mocha test/81.storage-keyv.js
+ * MEMCACHE_SERVERS=localhost:11211 mocha test
  */
 
 import {strict as assert} from "assert";
-import {Store, Options} from "keyv";
 
-import {compressKVS, KVS} from "../lib/key-value-compress";
+import {compressKVS} from "../lib/key-value-compress";
 
 const TESTNAME = __filename.replace(/^.*\//, "");
 
@@ -21,27 +20,18 @@ const DESCRIBE = MEMCACHE_SERVERS ? describe : describe.skip;
 const PREFIX = TESTNAME + ":" + Date.now() + ":";
 
 DESCRIBE(TESTNAME, () => {
-    let storage: KVS<Buffer>;
-    let closure: () => void;
+    const Keyv = require("keyv");
+    const KeyvMemcache = require("keyv-memcache");
+    const memcache = new KeyvMemcache(MEMCACHE_SERVERS);
 
-    before(() => {
-        const Keyv = require('keyv');
-        const KeyvMemcache = require('keyv-memcache');
-
-        const memcache: Store<Buffer> = new KeyvMemcache(MEMCACHE_SERVERS);
-        closure = () => (memcache as any).client.close();
-
-        const options: Options<Buffer> = {
-            namespace: PREFIX,
-            store: memcache,
-            ttl: 60000, // 1 minute
-        };
-
-        storage = new Keyv(options);
+    const storage = new Keyv({
+        namespace: PREFIX,
+        store: memcache,
+        ttl: 60000, // 1 minute
     });
 
     after(() => {
-        closure();
+        (memcache as any).client.close();
     });
 
     it("object", async () => {

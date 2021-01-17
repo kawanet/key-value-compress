@@ -2,12 +2,12 @@
  * key-value-compress.ts
  */
 
-import {CompressOptions, KVS} from "../types/key-value-compress";
+import {KVC} from "../types/key-value-compress";
 import * as _compress from "./_compress";
 import {namespaceKVS, stringifyKVS} from "./_transform";
 import {base64KVS, concatBuffer, digestBuffer, splitBuffer} from "./_util";
 
-export {KVS, CompressOptions};
+type KVS<T> = KVC.KVS<T>;
 
 const enum defaults {
     version = 1, // version
@@ -28,7 +28,7 @@ interface KVCMeta {
  * Key-Value storage interceptor to deflate, split, concatenate and inflate content
  */
 
-export function compressKVS<V = any>(options: CompressOptions): KVS<V> {
+export function compressKVS<V = any>(options: KVC.Options): KVS<V> {
     let {chunkNS, chunkSize, compress, digest, encoding} = options || {};
     let {inlineSize, metaNS, metaStorage, storage} = options || {};
 

@@ -7,10 +7,9 @@
  */
 
 import {strict as assert} from "assert";
-import {Client} from "memjs";
-
-import {compressKVS, KVS} from "../lib/key-value-compress";
 import {bufferKVS} from "memcached-kvs";
+
+import {compressKVS} from "../lib/key-value-compress";
 
 const TESTNAME = __filename.replace(/^.*\//, "");
 
@@ -22,13 +21,13 @@ const DESCRIBE = MEMCACHE_SERVERS ? describe : describe.skip;
 const PREFIX = TESTNAME + ":" + Date.now() + ":";
 
 DESCRIBE(TESTNAME, () => {
-    let client: Client;
-    let storage: KVS<Buffer>;
+    const {Client} = require("memjs");
+    const client = Client.create(MEMCACHE_SERVERS);
 
-    before(() => {
-        client = require("memjs").Client.create(MEMCACHE_SERVERS, {expires: 60});
-
-        storage = bufferKVS({memjs: client, namespace: PREFIX});
+    const storage = bufferKVS({
+        namespace: PREFIX,
+        memjs: client,
+        expires: 60, // 1 minute
     });
 
     after(() => {
