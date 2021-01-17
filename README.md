@@ -3,7 +3,7 @@
 [![Node.js CI](https://github.com/kawanet/key-value-compress/workflows/Node.js%20CI/badge.svg?branch=main)](https://github.com/kawanet/key-value-compress/actions/)
 [![npm version](https://badge.fury.io/js/key-value-compress.svg)](https://www.npmjs.com/package/key-value-compress)
 
-Key-Value storage interceptor to deflate, split, concatenate and inflate content.
+Key-Value interface to deflate, split, concatenate and inflate storage.
 
 ## SYNOPSIS
 
@@ -30,10 +30,11 @@ See TypeScript declaration
 [key-value-compress.d.ts](https://github.com/kawanet/key-value-compress/blob/main/types/key-value-compress.d.ts)
 for detail.
 
-## LINKS
+## SEE ALSO
 
 - https://github.com/kawanet/key-value-compress
 - https://www.npmjs.com/package/key-value-compress
+- https://www.npmjs.com/package/memcached-kvs
 
 ## MIT LICENSE
 

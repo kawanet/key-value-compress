@@ -3,13 +3,14 @@
 /**
  * @example
  * docker run -d -p 11211:11211 --name memcached memcached
- * MEMCACHE_SERVERS=localhost:11211 mocha test/82.storage-memjs.js
+ * MEMCACHE_SERVERS=localhost:11211 mocha test
  */
 
 import {strict as assert} from "assert";
 import {Client} from "memjs";
 
 import {compressKVS, KVS} from "../lib/key-value-compress";
+import {bufferKVS} from "memcached-kvs";
 
 const TESTNAME = __filename.replace(/^.*\//, "");
 
@@ -27,10 +28,7 @@ DESCRIBE(TESTNAME, () => {
     before(() => {
         client = require("memjs").Client.create(MEMCACHE_SERVERS, {expires: 60});
 
-        storage = {
-            get: async (key) => (await client.get(PREFIX + key))?.value,
-            set: async (key, value) => client.set(PREFIX + key, value, {}),
-        };
+        storage = bufferKVS({memjs: client, namespace: PREFIX});
     });
 
     after(() => {
