@@ -1,7 +1,7 @@
 {
   "name": "key-value-compress",
   "description": "Key-Value interface to deflate, split, concatenate and inflate storage.",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "author": "Yusuke Kawasaki <u-suke@kawa.net>",
   "bugs": {
     "url": "https://github.com/kawanet/key-value-compress/issues"
