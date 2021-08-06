@@ -14,7 +14,7 @@ describe(TESTNAME, () => {
         const storage = new Map<string, string>();
         const kvc = compressKVS<string>({ttl, storage});
         await kvc.set("foo", "FOO");
-        await WAIT(1);
+        await WAIT(10);
         assert.equal(await kvc.get("foo"), "FOO");
         await WAIT(50);
         assert.equal(await kvc.get("foo"), "FOO");
@@ -26,7 +26,7 @@ describe(TESTNAME, () => {
         const storage = new TimedKVS<string>({expires: 150});
         const kvc = compressKVS<string>({ttl, storage});
         await kvc.set("foo", "FOO");
-        await WAIT(1);
+        await WAIT(10);
         assert.equal(await kvc.get("foo"), "FOO");
         await WAIT(50);
         assert.equal(await kvc.get("foo"), "FOO");
@@ -38,7 +38,7 @@ describe(TESTNAME, () => {
         const storage = new TimedKVS<string>({expires: 50});
         const kvc = compressKVS<string>({ttl, storage});
         await kvc.set("foo", "FOO");
-        await WAIT(1);
+        await WAIT(10);
         assert.equal(await kvc.get("foo"), "FOO");
         await WAIT(50);
         assert.equal(await kvc.get("foo") || "empty", "empty", "should be expired by TimedKVS");
