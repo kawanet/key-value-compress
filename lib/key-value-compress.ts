@@ -10,7 +10,7 @@ import {base64KVS, concatBuffer, digestBuffer, splitBuffer} from "./_util";
 type KVS<T> = KVC.KVS<T>;
 
 const enum defaults {
-    version = 1, // version
+    version = 2, // version
     chunkSize = 491520, // 480KB
     compress = "deflate",
     digest = "sha1",
@@ -21,7 +21,8 @@ interface KVCMeta {
     v: number;
     type: string;
     chunks: string[];
-    inline: { [digest: string]: string };
+    inline?: { [digest: string]: string };
+    dt?: number;
 }
 
 /**
@@ -30,7 +31,7 @@ interface KVCMeta {
 
 export function compressKVS<V = any>(options: KVC.Options): KVS<V> {
     let {chunkNS, chunkSize, compress, digest, encoding} = options || {};
-    let {inlineSize, metaNS, metaStorage, storage} = options || {};
+    let {inlineSize, metaNS, metaStorage, storage, ttl} = options || {};
 
     if (!metaStorage) metaStorage = storage as any;
     if (metaNS) metaStorage = namespaceKVS(metaStorage, metaNS);
@@ -64,6 +65,10 @@ export function compressKVS<V = any>(options: KVC.Options): KVS<V> {
             }
         }
 
+        if (+ttl) {
+            meta.dt = +Date.now();
+        }
+
         const compressed = await compressor.compress(raw);
         const chunks = splitBuffer(compressed, chunkSize);
 
@@ -85,12 +90,20 @@ export function compressKVS<V = any>(options: KVC.Options): KVS<V> {
 
     async function get(key: string): Promise<V> {
         const meta = await metaKSV.get(key);
-        if (meta?.v !== defaults.version) return;
-        if (!meta.chunks?.length) return;
+        if (!meta) return;
+        const {inline, chunks, dt, v} = meta;
+        if (v !== defaults.version) return;
+        if (!chunks) return;
+        if (!chunks.length) return;
 
-        const chunks = [] as Buffer[];
-        for (const hash of meta.chunks) {
-            const base64 = meta.inline && meta.inline[hash];
+        if (ttl) {
+            if (!dt) return;
+            if (dt < Date.now() - ttl) return;
+        }
+
+        const array = [] as Buffer[];
+        for (const hash of chunks) {
+            const base64 = inline && inline[hash];
             let chunk: Buffer;
 
             if (base64) {
@@ -102,10 +115,10 @@ export function compressKVS<V = any>(options: KVC.Options): KVS<V> {
             if (!chunk) return;
             const check = digestBuffer(digest, chunk);
             if (check !== hash) return;
-            chunks.push(chunk);
+            array.push(chunk);
         }
 
-        const joined = concatBuffer(chunks);
+        const joined = concatBuffer(array);
         const buffer = await compressor.decompress(joined);
         if (!buffer) return;
 
