@@ -1,9 +1,11 @@
-/**
- * `KVS<V>` is an interface for key-value storage, such as `keyv`.
- * https://www.npmjs.com/package/keyv
- */
+// key-value-compress.d.ts
 
 export namespace KVC {
+    /**
+     * `KVS<V>` is an interface for key-value storage, such as `keyv`.
+     * https://www.npmjs.com/package/keyv
+     */
+
     interface KVS<V> {
         /**
          * write an item into storage
@@ -107,11 +109,16 @@ export namespace KVC {
          * prefix string to prepend for keys of content chunk storage
          */
         chunkNS?: string;
+
+        /**
+         * time-to-live in milliseconds
+         */
+        ttl?: number;
     }
 }
 
 /**
- * `compressKVS()` convert KVS or MapLike to KVS with content compression.
+ * `compressKVS()` installs its content compression feature upon KVS or MapLike given.
  */
 
 export function compressKVS<V = any>(options: KVC.Options): KVC.KVS<V>;
