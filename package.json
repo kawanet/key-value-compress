@@ -1,7 +1,7 @@
 {
   "name": "key-value-compress",
   "description": "Key-Value interface to deflate, split, concatenate and inflate storage.",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "Yusuke Kawasaki <u-suke@kawa.net>",
   "bugs": {
     "url": "https://github.com/kawanet/key-value-compress/issues"
@@ -10,20 +10,20 @@
     "Yusuke Kawasaki <u-suke@kawa.net>"
   ],
   "devDependencies": {
-    "@types/keyv": "^3.1.2",
-    "@types/memjs": "^1.2.3",
+    "@types/keyv": "^3.1.3",
+    "@types/memjs": "^1.2.4",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.4.13",
     "buffer-json": "^2.0.0",
     "json-buffer": "^3.0.1",
-    "keyv": "^4.0.3",
-    "keyv-memcache": "^1.2.5",
+    "keyv": "^4.0.4",
+    "keyv-memcache": "^1.2.7",
     "memcached-kvs": "^0.1.2",
     "memjs": "^1.3.0",
-    "mocha": "^9.0.3",
+    "mocha": "^9.1.3",
     "msgpack-lite": "^0.1.26",
     "timed-kvs": "^0.3.2",
-    "typescript": "^4.3.5"
+    "typescript": "^4.5.4"
   },
   "files": [
     "LICENSE",
