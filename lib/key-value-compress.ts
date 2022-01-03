@@ -92,7 +92,10 @@ export function compressKVS<V = any>(options: KVC.Options): KVS<V> {
         const meta = await metaKSV.get(key);
         if (!meta) return;
         const {inline, chunks, dt, v} = meta;
-        if (v !== defaults.version) return;
+
+        // reject data when stored with a future version of the library
+        if (!+v || v > defaults.version) throw Error(`Invalid storage version: ${v}`);
+
         if (!chunks) return;
         if (!chunks.length) return;
 
