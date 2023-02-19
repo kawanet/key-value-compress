@@ -33,12 +33,13 @@ for detail.
 ## SEE ALSO
 
 - https://github.com/kawanet/key-value-compress
+- https://www.npmjs.com/package/async-cache-queue
 - https://www.npmjs.com/package/key-value-compress
 - https://www.npmjs.com/package/memcached-kvs
 
 ## MIT LICENSE
 
-Copyright (c) 2021-2022 Yusuke Kawasaki
+Copyright (c) 2021-2023 Yusuke Kawasaki
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
